@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= title %></title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <script type="text/javascript" src="/socket.io/socket.io.js">
+    </script>
+
+  </head>
+  <body>
+
+    <h1><%= title %></h1>
+    <p>Welcome to <%= title %></p>
+    <input type="text" name="" value="" onchange="changetext(event)">
+    <div class="list">
+    </div>
+    <script type="text/javascript">
+      const socket = io.connect();
+      const listdom = document.querySelector("div")
+      socket.on("msg_hand",function(data){
+        //监听msg
+        const pdom =document.createElement("p")
+        pdom.innerText = data;
+        //listdom.appendChild(pdom);
+      })
+      socket.on("msg_return_server",function(data,cb){
+        //监听msg
+        cb();
+        console.log("收到返回请求");
+        console.log("收到服务器信息");
+        const pdom =document.createElement("p");
+        pdom.innerText = data;
+        listdom.appendChild(pdom);
+      })
+      function changetext(event){
+        socket.emit("msg_return_client",event.target.value)
+      }
+    </script>
+  </body>
+</html>
