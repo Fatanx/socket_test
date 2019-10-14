@@ -25,12 +25,13 @@ io.use(iosession);
 io.on("connection",function(socket){
   socket.emit("msg_hand","链接成功");
   console.log("客户端链接成功");
+  num = ++socket.handshake.session.num;
   var temp_data='';
 
   socket.on("msg_return_client",function(data){
     console.log("收到回复:" + data +"创建时间("+ new Date()+")");
     temp_data = data;
-    socket.emit("msg_return_server",temp_data,res=>console.log("响应成功"));
+    socket.emit("msg_return_server",'用户:'+num +'说:'+ temp_data,res=>console.log("响应成功"));
   })
 
 })
