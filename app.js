@@ -3,6 +3,13 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+//express session
+var session = require("express-session")({
+  secret:'keyboard cat',
+  cookie :{800000}
+});
+//socket io
+var iosession = require("express-socket.io-session")(session);
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
@@ -12,7 +19,8 @@ var server = require("http").Server(app);
 var io = require("socket.io")(server);
 
 server.listen(3000);
-
+//socket 引入 iosession
+io.use(isession);
 
 io.on("connection",function(socket){
   socket.emit("msg_hand","链接成功");
@@ -35,6 +43,8 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
+app.use(session);
+
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
