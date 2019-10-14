@@ -6,9 +6,9 @@ var logger = require('morgan');
 //express session
 var session = require("express-session")({
   secret:'keyboard cat',
-  cookie :{800000}
+  cookie : {maxAge:80000}
 });
-//socket io
+//socket io  session
 var iosession = require("express-socket.io-session")(session);
 
 var indexRouter = require('./routes/index');
@@ -20,7 +20,7 @@ var io = require("socket.io")(server);
 
 server.listen(3000);
 //socket 引入 iosession
-io.use(isession);
+io.use(iosession);
 
 io.on("connection",function(socket){
   socket.emit("msg_hand","链接成功");
@@ -42,7 +42,7 @@ app.set('view engine', 'ejs');
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
+//app.use(cookieParser());
 app.use(session);
 
 app.use(express.static(path.join(__dirname, 'public')));
