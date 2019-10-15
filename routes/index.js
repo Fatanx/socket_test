@@ -8,4 +8,10 @@ router.get('/', function(req, res, next) {
   res.render('index', { title: 'Express' , num });
 });
 
+router.get('/ajax',function(req,res){
+  req.session.num = req.session.num || 0;
+  const num  = ++req.session.num;
+  res.send("num = " + num);
+});
+
 module.exports = router;
